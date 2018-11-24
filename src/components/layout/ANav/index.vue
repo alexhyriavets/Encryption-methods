@@ -21,18 +21,18 @@ const menuConfig = [
   {
     caption: 'Affine',
     iconClass: 'el-icon-document',
-    routeName: 'affine'
+    routeName: 'affine',
   },
   {
     caption: 'BitPermutation',
     iconClass: 'el-icon-document',
-    routeName: 'bit-permutation'
+    routeName: 'bit-permutation',
   },
   {
     caption: 'Hill',
     iconClass: 'el-icon-setting',
-    routeName: 'hill'
-  }
+    routeName: 'hill',
+  },
 ]
 
 export default {
@@ -40,10 +40,10 @@ export default {
 
   name: 'Nav',
   methods: {
-    redirectTo (routeName) {
+    redirectTo(routeName) {
       this.$router.push({ name: routeName })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -57,4 +57,3 @@ export default {
   }
 }
 </style>
-

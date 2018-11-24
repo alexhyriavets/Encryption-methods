@@ -29,8 +29,8 @@ export default {
   components: {
     AHeader,
     AFooter,
-    ANav
-  }
+    ANav,
+  },
 }
 </script>
 
