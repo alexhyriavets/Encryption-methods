@@ -38,7 +38,8 @@
     "rules": {
       "semi": "off",
       "import/extensions": "off",
-      "no-bitwise": "off"
+      "no-bitwise": "off",
+      "no-plusplus": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"
