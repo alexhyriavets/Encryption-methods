@@ -36,6 +36,7 @@
       "@vue/airbnb"
     ],
     "rules": {
+      "eslint-disable": "always",
       "semi": "off",
       "import/extensions": "off",
       "no-bitwise": "off",
