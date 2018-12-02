@@ -91,6 +91,18 @@ const options = [
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
 
+const getMiltiplicativeInverseOf = (a, b, findedValue = 1) => {
+  const va1 = ((findedValue * b) + 1) / a
+  const calculation = va1 % a
+
+  if (calculation === 0) return va1
+  if (findedValue >= 100000) throw new Error('Cannot find multiplicativ inverse')
+
+  findedValue += 1
+
+  return getMiltiplicativeInverseOf(a, b, findedValue)
+}
+
 export default {
   options,
 
@@ -155,36 +167,27 @@ export default {
 
       this.encryptedMessage = this.enteredMessage.split('').map(enc).join('')
 
-      // for (let i = 0; i < this.enteredMessage.length; i++) {
-      //   const number = Number(this.keyA)**11 *
-      // (ALPHABET.indexOf(this.enteredMessage[i]) - +this.keyB)
-      //
-      //   const index = (number >= 0)
-      //     ? (number % ALPHABET.length)
-      //     : (ALPHABET.length - (Math.abs(number) % ALPHABET.length))
-      //
-      //   result += ALPHABET[index];
-      // }
-      //
       this.showDialog()
-
-      // this.encryptedMessage = result;
     },
     decrypt() {
-      // let result = ''
-      // for (let i = 0; i < this.enteredMessage.length; i++) {
-      //   result += ALPHABET[
-      //     (+this.keyA * ALPHABET.indexOf(this.enteredMessage[i]) + +this.keyB) % ALPHABET.length
-      //   ];
-      // }
+      const dec = character => {
+        const charCode = ALPHABET.indexOf(character)
+        const multiplicativeInverse = getMiltiplicativeInverseOf(this.keyA, ALPHABET.length, 1)
 
-      const dec = character => (this.keyA * Number(character) + Number(this.keyB)) % ALPHABET.length
+        const resultCode = ((multiplicativeInverse * (charCode - this.keyB)) % ALPHABET.length)
+
+        const final = resultCode >= 0
+          ? resultCode
+          : ALPHABET.length - Math.abs(resultCode)
+
+        return ALPHABET[
+          final
+        ]
+      }
 
       this.decryptedMessage = this.enteredMessage.split('').map(dec).join('')
 
       this.showDialog()
-
-      // this.decryptedMessage = result;
     },
     clearForm() {
       this.enteredMessage = ''
