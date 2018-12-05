@@ -77,6 +77,7 @@
 
 <script>
 /* eslint-disable */
+import { compose, map, join, split } from 'ramda'
 
 const options = [
   {
@@ -90,18 +91,6 @@ const options = [
 ]
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'
-
-const getMiltiplicativeInverseOf = (a, b, findedValue = 1) => {
-  const va1 = ((findedValue * b) + 1) / a
-  const calculation = va1 % a
-
-  if (calculation === 0) return va1
-  if (findedValue >= 100000) throw new Error('Cannot find multiplicativ inverse')
-
-  findedValue += 1
-
-  return getMiltiplicativeInverseOf(a, b, findedValue)
-}
 
 export default {
   options,
@@ -172,22 +161,44 @@ export default {
     decrypt() {
       const dec = character => {
         const charCode = ALPHABET.indexOf(character)
-        const multiplicativeInverse = getMiltiplicativeInverseOf(this.keyA, ALPHABET.length, 1)
+        const multiplicativeInverse = this.getMiltiplicativeInverseOf(this.keyA, ALPHABET.length)
 
-        const resultCode = ((multiplicativeInverse * (charCode - this.keyB)) % ALPHABET.length)
+        const decryptionExpression = ((multiplicativeInverse * (charCode - this.keyB)) % ALPHABET.length)
 
-        const final = resultCode >= 0
-          ? resultCode
-          : ALPHABET.length - Math.abs(resultCode)
+        const correctedExpression = decryptionExpression >= 0
+          ? decryptionExpression
+          : ALPHABET.length - Math.abs(decryptionExpression)
 
-        return ALPHABET[
-          final
-        ]
+        return ALPHABET[correctedExpression]
       }
 
-      this.decryptedMessage = this.enteredMessage.split('').map(dec).join('')
+      const getDecryptedMessage = compose(
+        join(''),
+        map(dec),
+        split('')
+      )
+
+      this.decryptedMessage = getDecryptedMessage(this.enteredMessage)
 
       this.showDialog()
+    },
+    getMiltiplicativeInverseOf(a, b, findedValue = 1) {
+      const tempValue = ((findedValue * b) + 1) / a
+      const calculation = tempValue % a
+
+      if (calculation === 0) return tempValue
+      if (findedValue >= 1000) {
+        this.$notify({
+          title: 'Error',
+          message: 'Try another key a',
+          type: 'error'
+        })
+        return
+      }
+
+      findedValue += 1
+
+      return this.getMiltiplicativeInverseOf(a, b, findedValue)
     },
     clearForm() {
       this.enteredMessage = ''
